@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Día 2 – Lista Editable</title>
+    <style>
+      ul { list-style: none; padding: 0; }
+      li { margin: 4px 0; padding: 6px; border: 1px solid #ccc; }
+      button { margin-left: 6px; }
+      .resaltado { background: #007bff; color: white; }
+      .inputedit {border: 1px solid red; width: 5rem; height: 1.5rem; }
+    </style>
+  </head>
+  <body>
+    <ul id="list">
+      <li>Elemento 1 <button class="edit">✏️</button><button class="remove">❌</button></li>
+    </ul>
+    <button id="add">Agregar</button>
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>
