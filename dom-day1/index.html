@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>DOM Día 1</title>
+    <style>
+      .resaltado {
+        color: white;
+        background: #007bff;
+        padding: 4px 6px;
+        border-radius: 4px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="contenedor">
+      <p>Primer párrafo</p>
+      <p>Segundo párrafo</p>
+      <p>Tercer párrafo</p>
+    </div>
+    <button id="btn-cambiar">Cambiar texto</button>
+    <button id="btn-agregar">Agregar parrafo de texto</button>
+    <button id="btn-reset">Reset</button>
+
+    <input id="pid" type="number" min="1" placeholder="pid a resaltar" />
+    <button id="btn-focus">Focus por pid</button>
+
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>
