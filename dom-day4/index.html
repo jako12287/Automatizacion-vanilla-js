@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Día 4 – Reto de propagación</title>
+    <style>
+      * { box-sizing: border-box; }
+      body { font-family: system-ui, sans-serif; margin: 24px; }
+      #container {
+        padding: 16px;
+        border: 2px solid #2d6cdf;
+        border-radius: 8px;
+        background: #eef5ff;
+        display: inline-flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      button { padding: 8px 12px; cursor: pointer; }
+      #log {
+        margin-top: 16px;
+        padding: 12px;
+        background: #111;
+        color: #0f0;
+        border-radius: 6px;
+        min-height: 100px;
+        white-space: pre-wrap;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Día 4 – Propagación y stopPropagation</h1>
+
+    <div id="container" aria-label="Contenedor de botones">
+      <button id="btnA" type="button">Botón A</button>
+      <button id="btnB" type="button">Botón B (no propaga)</button>
+      <button id="btnC" type="button">Botón C</button>
+    </div>
+
+    <h2>Log</h2>
+    <pre id="log" aria-live="polite"></pre>
+
+    <script  type="module" src="./main.js"></script>
+  </body>
+</html>
