@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Día 3 – Performance DOM</title>
+  <style>
+    #list { padding: 0; margin: 0; }
+    .item { padding: 6px 8px; border-bottom: 1px solid #eee; }
+    .highlight { background: #fffcdf; }
+  </style>
+</head>
+<body>
+  <h1>Render masivo optimizado</h1>
+  <button id="render-naive">Render 100 (naive)</button>
+  <button id="render-fragment">Render 100 (fragment)</button>
+  <button id="render-innerhtml">Render 100 (innerHTML)</button>
+  <button id="toggle-highlight">Toggle highlight (batch)</button>
+  <pre id="log"></pre>
+  <ul id="list"></ul>
+  <script type="module" src="./main.js"></script>
+</body>
+</html>

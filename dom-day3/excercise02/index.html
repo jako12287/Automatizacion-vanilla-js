@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Día 3 – Catálogo con Fragment</title>
+  <style>
+    body { font-family: sans-serif; padding: 1rem; }
+    .card {
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      padding: .5rem 1rem;
+      margin-bottom: .5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .price { font-weight: bold; color: #007bff; }
+    button { cursor: pointer; }
+  </style>
+</head>
+<body>
+  <button id="load">Cargar catálogo</button>
+  <div id="catalog"></div>
+  <script type="module" src="./main.js"></script>
+</body>
+</html>
