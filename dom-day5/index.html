@@ -1,0 +1,32 @@
+<body>
+    <style>
+        .card{
+            border: 1px dashed red;
+            width: 300px;
+            height: 200px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 3rem;
+            padding: 1rem;
+            border-radius: 15px;
+        }
+        #carrito{
+            display: flex;
+            gap: 2rem;
+            flex-direction: column;
+        }
+    </style>
+  <h1>Catálogo</h1>
+  <div id="catalogo">
+    <button data-id="1" data-nombre="Laptop Gamer">Agregar Laptop</button>
+    <button data-id="2" data-nombre="Monitor 27">Agregar Monitor</button>
+  </div>
+
+  <h2>Carrito</h2>
+  <div id="carrito"></div>
+
+  <pre id="log"></pre>
+
+  <script type="module" src="./main.js"></script>
+</body>
