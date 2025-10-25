@@ -1,52 +1,113 @@
-const catalog = document.querySelector("#catalogo");
-const cart = document.querySelector("#carrito");
-const body = document.body;
+// ====== Referencias y estado ======
+const catalog = document.querySelector('#catalogo');
+const cart    = document.querySelector('#carrito');
+const body    = document.body;
 
-const state = { cart: [] };
+const state = { cart: [] }; // fuente de verdad
 
-const createCart = (title = "", id) => {
-  const card = document.createElement("div");
-  card.dataset.itemId = id;
-  const titleCard = document.createElement("h2");
-  const btnDelete = document.createElement("button");
-  btnDelete.type = "button";
-  btnDelete.textContent = "X";
-  titleCard.textContent = title.trim();
-  card.className = "card";
 
-  card.append(titleCard, btnDelete);
+// ====== Vista (creación de nodos UI) ======
+function createCartItemNode(title, id) {
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.dataset.itemId = String(id);
+
+  const titleEl = document.createElement('h2');
+  titleEl.textContent = String(title).trim();
+
+  const btnDel = document.createElement('button');
+  btnDel.type = 'button';
+  btnDel.className = 'remove';
+  btnDel.textContent = 'X';
+
+  // Emite intención de eliminar (target + bubbles)
+  btnDel.addEventListener('click', () => {
+    btnDel.dispatchEvent(
+      new CustomEvent('producto:eliminado', {
+        detail: { id },
+        bubbles: true
+      })
+    );
+  });
+
+  card.append(titleEl, btnDel);
   return card;
-};
+}
 
-catalog.addEventListener("click", (e) => {
-  const btn = e.target.closest("button[data-id][data-nombre]");
+
+// ====== Catálogo: SOLO emite intención de agregar ======
+catalog.addEventListener('click', (e) => {
+  const btn = e.target.closest('button[data-id][data-nombre]');
   if (!btn) return;
 
-  const { id, nombre } = btn.dataset;
-  const idNum = Number(id);
+  const id = Number(btn.dataset.id);
+  const nombre = btn.dataset.nombre;
 
-  const ev = new CustomEvent("producto:agregado", {
-    detail: { id: idNum, nombre },
-    bubbles: true,
-  });
+  // cancelable: true → el controlador global puede vetar con preventDefault()
+  const ok = btn.dispatchEvent(
+    new CustomEvent('producto:agregado', {
+      detail: { id, nombre },
+      bubbles: true,
+      cancelable: true
+    })
+  );
 
-  const isExist = state.cart.some((i) => i.id === idNum);
-
-  if (isExist) return;
-
-  state.cart.push({ id: idNum, nombre });
-
-  btn.dispatchEvent(ev);
+  if (!ok) {
+    // bloqueado por el controlador global (por ejemplo, límite alcanzado)
+    console.warn('Agregado cancelado por el controlador global');
+  }
 });
 
-body.addEventListener("producto:agregado", (e) => {
-  console.log("Producto agregado:", e.detail.nombre);
-  cart.textContent = "";
-  const fragment = document.createDocumentFragment();
-  state.cart.forEach((item) => {
-    const newItem = createCart(item.nombre, item.id);
-    fragment.append(newItem);
-  });
 
-  cart.append(fragment);
+// ====== Controlador global (body): muta estado y actualiza UI ======
+
+// Agregar
+body.addEventListener('producto:agregado', (e) => {
+  const { id, nombre } = e.detail;
+
+  // Regla: no duplicar por id
+  if (state.cart.some(p => p.id === id)) return;
+
+  // Regla de negocio: límite máximo (ej. 3)
+  if (state.cart.length >= 3) {
+    e.preventDefault();
+    console.log('Límite alcanzado (máximo 3 ítems)');
+    return;
+  }
+
+  // Muta estado
+  state.cart.push({ id, nombre });
+
+  // Render incremental (solo el ítem agregado)
+  cart.append(createCartItemNode(nombre, id));
+
+  // Notificar total actualizado
+  body.dispatchEvent(new CustomEvent('cart:updated', {
+    detail: { count: state.cart.length },
+    bubbles: true
+  }));
+});
+
+// Eliminar
+body.addEventListener('producto:eliminado', (e) => {
+  const { id } = e.detail;
+
+  // Muta estado
+  const idx = state.cart.findIndex(p => p.id === id);
+  if (idx === -1) return;
+  state.cart.splice(idx, 1);
+
+  // Quitar solo ese nodo del DOM
+  cart.querySelector(`.card[data-item-id="${id}"]`)?.remove();
+
+  // Notificar total actualizado
+  body.dispatchEvent(new CustomEvent('cart:updated', {
+    detail: { count: state.cart.length },
+    bubbles: true
+  }));
+});
+
+// Listener del total actualizado (puedes conectar badges/headers, etc.)
+body.addEventListener('cart:updated', (e) => {
+  console.log('Carrito actualizado. Total:', e.detail.count);
 });
